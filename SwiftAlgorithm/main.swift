@@ -95,19 +95,7 @@ print("Hello, World!")
             curtNode = tmpNode.right
         }
         return res
-//        var res: [Int] = []
-//        var stack: [TreeNode] = []
-//        var curr: TreeNode? = root
-//        while curr != nil || stack.isEmpty == false {
-//            while let unwrapped = curr {
-//                stack.append(unwrapped)
-//                curr = curr?.left
-//            }
-//            let last: TreeNode = stack.removeLast()
-//            res.append(last.val)
-//            curr = last.right
-//        }
-//        return res
+
     }
     
     func reverseString(_ s:String?) -> String {
@@ -185,6 +173,192 @@ print("Hello, World!")
         }
         return i
     }
+//    [-2,1,-3,4,-1,2,1,-5,4]
+    func maxSubArray(_ nums:[Int]) -> Int {
+        var maxSum = nums[0]
+        var sum = nums[0]
+        for i in 1..<nums.count {
+            sum = max(nums[i], sum + nums[i])
+            maxSum = max(maxSum, sum)
+        }
+        return maxSum
+    }
+    
+    func twoSumII(_ nums:[Int],_ target:Int) -> [Int] {
+        if nums.count < 2 {return nums}
+        var res = [Int]()
+            var low = 0
+            var high = nums.count - 1
+            while low<high {
+                let v = nums[low] + nums[high]
+                if v == target {
+                 res.append(low + 1)
+                    res.append(high + 1)
+                    return res
+                }else if v > target {
+                    high -= 1
+                }else {
+                    low += 1
+                }
+            }
+        return res
+    }
+    
+    
+    func intersectionOfTwoArray(_ nums1:[Int], _ nums2:[Int]) -> [Int] {
+        var set1 = Set<Int>()
+        var set2 = Set<Int>()
+        for n1 in nums1 {
+            set1.insert(n1)
+        }
+        for n2 in nums2 {
+            if set1.contains(n2){
+                set2.insert(n2)
+            }
+        }
+        return Array(set2)
+    }
+    
+    func intersectionArrayII(_ nums1:[Int], _ nums2:[Int]) -> [Int] {
+        var res:[Int] = []
+        
+        var dict1 = Dictionary<Int,Int>()
+        for num in nums1 {
+            if dict1[num] != nil {
+                dict1[num]! += 1
+            }else {
+                dict1[num] = 1
+            }
+        }
+        for num in nums2 {
+            if dict1[num] != nil && dict1[num]! > 0{
+                res.append(num)
+                dict1[num]! -= 1
+            }
+        }
+        return res
+    }
+    //[4,3,2,7,8,2,3,1]
+    func findDisappearedNumbers(_ nums: [Int]) ->[Int]{
+         var nums = nums
+        if nums.count == 0 {return []}
+        var res :[Int] = []
+        for i in 0..<nums.count {
+            let val = abs(nums[i]) - 1
+            if nums[val] > 0 {
+                nums[val] = -nums[val]
+            }
+            
+        }
+        for i in 0..<nums.count {
+            if nums[i] > 0 {
+            res.append(i + 1)
+            }
+        }
+        return res
+    }
+    func roateArray(_ nums: inout [Int], _ k:Int) {
+        let n = nums.count
+        let k = k%n
+        reverseArray(&nums, 0, n - k - 1)
+        reverseArray(&nums, n - k, n - 1)
+        reverseArray(&nums, 0, n - 1)
+    }
+    
+    func reverseArray(_ nums:inout [Int], _ low:Int , _ high:Int){
+        var i = low
+        var j = high
+        while i<j {
+            swap(&nums[i], &nums[j])
+            i += 1
+            j -= 1
+        }
+    }
+    //bab abb
+    func isIsomorphic(_ s:String, _ t:String) -> Bool {
+        var sCountArr = Array(repeating: 0, count: 256)
+        var tCountArr = Array(repeating: 0, count: 256)
+//        var sArr = Array(s.utf8)
+//        var tArr = Array(t.utf8)
+        
+        for (i,e) in s.utf8.enumerated() {
+            if sCountArr[e.hashValue] != tCountArr[e.hashValue] {
+                return false
+            }
+            sCountArr[e.hashValue] = i + 1
+            tCountArr[e.hashValue] = i + 1
+        }
+        
+//        for i in 0..<sArr.count {
+//            if sCountArr[sArr[i].hashValue] != tCountArr[tArr[i].hashValue] {
+//                return false
+//            }
+//           sCountArr[sArr[i].hashValue] = i + 1
+//           tCountArr[tArr[i].hashValue] = i + 1
+//            
+//        }
+//        swap(&sCountArr, &<#T##b: T##T#>)
+//        String(sCountArr)
+        return true
+    }
+    
+    func reverseVowels(_ s:String) -> String {
+        if s.characters.count == 0 {return ""}
+        let vowelstr = "aeiouAEIOU"
+        var start = 0
+        var end = s.characters.count - 1
+        var sArr = Array(s.characters)
+        while start < end {
+            while start<end && !vowelstr.contains(String(sArr[start])){
+                start += 1
+            }
+            while start<end && !vowelstr.contains(String(sArr[end])) {
+                end -= 1
+            }
+            swap(&sArr[start],&sArr[end])
+            start += 1
+            end -= 1
+        }
+        return String(sArr)
+    }
+    
+    func addStrings(_ num1:String, _ num2:String) -> String {
+                
+        var num1arr = Array(num1.characters)
+        var num2arr = Array(num2.characters)
+        var i = num1arr.count - 1
+        var j = num2arr.count - 1
+        var carry = 0
+        var res:[Int] = []
+        while i > -1 && j > -1 {
+            let val = carry + Int(String(num1arr[i]))! + Int(String(num2arr[j]))!
+            res.append(val%10)
+            carry = val/10
+            i -= 1
+            j -= 1
+        }
+        while i > -1 {
+            let val = carry + Int(String(num1arr[i]))!
+            res.append(val%10)
+            carry = val/10
+            i -= 1
+            
+        }
+        while j > -1 {
+            let val = carry + Int(String(num2arr[j]))!
+            res.append(val%10)
+            carry = val/10
+            j -= 1
+        }
+        if carry != 0 {
+            res.append(carry)
+        }
+        var resStr = ""
+        for num in res.reversed() {
+            resStr += String(num)
+        }
+        return resStr
+    }
 }
 
 public class TreeNode {
@@ -212,14 +386,35 @@ node.left = TreeNode.init(2)
 //s.mergeTwoSortedArray(&x, 5, y, 2)
 //print(x)
 
-var x = [1,1,2,3,4,5,5,6]
-x = [1,2]
-x = [1,1,1,2,2,3,3,3,3,3,3]
+var x = [1,1]
+var y = [1]
+//x = [1,2]
+//x = [-2,1,-3,4,-1,2,1,-5,4]
 //let res = s.removeDuplicates(&x)
-let res = s.removeDuplicatesII(&x)
-print(x)
+//let res = s.removeDuplicatesII(&x)
+//let res = s.maxSubArray(x)
+//let res = s.twoSumII(x, 7)
+//let res = s.intersectionOfTwoArray(x, y)
+//s.roateArray(&x, 3)
+//let res = s.intersectionArrayII(y, x)
+x = [4,3,2,7,8,2,3,1]
+//let res = s.findDisappearedNumbers(x)
+//print(x)
+//print(max(2, 4))
 //for i in 0...5 {
 ////    i = 4
 //    print(i)
 //}
+//for i in (0...9-1).reversed(){
+//    print(i)
+//}
+//print(Int("1")!)
+//print("Z".unicodeScalars.first!.hashValue)
+let sStr = "0"
+let tStr = "0"
+//let res = s.isIsomorphic(sStr, tStr)
+
+let res = s.addStrings(sStr, tStr)
 print(res)
+//let strNum:[Character] = ["2","1","3"]
+
