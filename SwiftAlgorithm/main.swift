@@ -359,6 +359,66 @@ print("Hello, World!")
         }
         return resStr
     }
+    
+    func countSegments(_ s:String) -> Int {
+         let sArr = Array(s.characters)
+        var num = 0
+        for i in (1...sArr.count-1).reversed() {
+            if  String(sArr[i]) != " " && (i == 0 || String(sArr[i-1]) == " ") {
+               num += 1
+            }
+        }
+        return num
+    }
+    
+    func repeatedSubstringPattern(_ s:String) -> Bool {
+        let len = s.characters.count
+        for i in (1...len/2).reversed() {
+            if len%i == 0 {
+                let times = len/i
+                var str = ""
+               let index = s.index(s.startIndex, offsetBy: i)
+                 let subs = s.substring(to: index)
+                for _ in 1...times {
+                  str += subs
+                }
+                if str == s {return true}
+            }
+        }
+        
+        return false
+    }
+    
+    func reverseLinkedList(_ head:ListNode?) -> ListNode? {
+          var head = head
+        var pre:ListNode? = nil
+        while head != nil {
+            let tmp = head?.next
+            head?.next = pre
+            pre = head
+            head = tmp
+        }
+        return pre
+    }
+    
+    func isPlindrome(_ x:Int) -> Bool {
+        var x = x
+        var res = 0
+        while x>res {
+            res = res*10 + x%10
+            x = x/10
+        }
+        return x == res || x == res/10
+    }
+}
+
+public class ListNode {
+    public var val:Int
+    public var next: ListNode?
+    public init(_ val:Int) {
+        self.val = val
+        self.next = nil
+    }
 }
 
 public class TreeNode {
@@ -414,7 +474,17 @@ let sStr = "0"
 let tStr = "0"
 //let res = s.isIsomorphic(sStr, tStr)
 
-let res = s.addStrings(sStr, tStr)
-print(res)
+//let res = s.addStrings(sStr, tStr)
+//let str = "Hello, my name is John"
+//let res = s.countSegments(str)
+let str = "abab"
+//let res = s.repeatedSubstringPattern(str)
+var listNode1 = ListNode(1)
+var listNode2 = ListNode(2)
+listNode1.next = listNode2
+let res  = s.reverseLinkedList(listNode1)
+//print(res?.val)
+//print(listNode1.val)
 //let strNum:[Character] = ["2","1","3"]
-
+//Int
+s.isPlindrome(10)
